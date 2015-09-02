@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Create Community</h1>
+	<form action="" method="post" name="create community" enctype=multipart/form-data>
+		{{ form.hidden_tag() }}
+		<p>	name of community:<br>
+			{{ form.name(size=20) }}<br>
+			{% for error in form.name.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+		</p>
+		<p>
+			<span style="color: red">**optional**</span><br>
+			Password if you want a private community:<br>
+			{{ form.password }}
+			{% for error in form.password.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+		</p>
+		<p>FAQ upload, must be a txt file, and the file must be called "name of community"
+			for example: if you are making a community "powerlifting", the FAQ filename must be 'powerlifting.txt'<br>
+			{{ form.FAQ }}
+			{% for error in form.FAQ.error %}
+			<span style ="color: red">[{{error}}]</span>
+			{% endfor %}
+		</p>
+		<br>
+		<p>Description as 140 characters
+			{{ form.description }}
+			{% for error in form.description.error %}
+			<span style="color: red">[{{error}}]</span>
+			{% endfor %}
+		</p>
+		<p><input type="submit" value="Create"></p>
+	</form>
+	
+{% endblock content %}

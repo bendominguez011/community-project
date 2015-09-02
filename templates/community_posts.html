@@ -1,0 +1,24 @@
+{% extends "community.html" %}
+{% block content %}
+<ul>
+{% for post in posts.items %}
+	<li><a href="/community/{{community}}/post/{{post.id}}">{{ post.title }}</a></li>
+{% endfor %}
+</ul>
+{% if enough_posts %}
+
+	{% if posts.has_prev %}
+		<a href="/community/{{community}}/{{posts.prev_num}}">{{ posts.prev_num }}</a>
+	{% else %}
+		Newer Posts
+	{% endif %}
+	
+	{% if posts.has_next %}
+		<a href="/community/{{community}}/{{posts.next_num}}">{{ posts.next_num }}</a>
+	{% else %}
+		Older Posts
+	{% endif %}
+
+{% endif %}
+
+{% endblock content %}

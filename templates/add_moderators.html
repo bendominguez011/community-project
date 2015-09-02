@@ -1,0 +1,13 @@
+{% extends "community.html" %}
+{% block content %}
+<form action="" method="post" name="assign mod">
+{{ assign_mod_form.hidden_tag() }}
+<p>Provide the username for the user you are considering to be a mod:
+	{{ assign_mod_form.username() }}
+	{% for error in assign_mod_form.username.errors %}
+	<span style="color: red;">[{{ error }}]</span>
+	{% endfor %}
+</p>
+<p input type="submit" value="Submit"></p>
+</form>
+{% endblock content %}

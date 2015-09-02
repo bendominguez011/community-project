@@ -1,0 +1,22 @@
+{% extends "community.html" %}
+{% block content %}
+<p>Create a new post here</p>
+<form action="" method="post" name="new post">
+	{{ postform.hidden_tag() }}
+	<p>
+		title<br>
+		{{ postform.title(size=80) }}<br>
+		{% for error in postform.title.errors %}
+		<span style="color: red;">[{{ error }}]</span>
+		{% endfor %}
+		</p>
+	<p>
+		Body<br>
+		{{ postform.body()}}
+		{% for error in postform.body.errors %}
+		<span style="color: red;">[{{ error }}]</span>
+		{% endfor %}
+		</p>
+	<p><input type="submit" value="Create Post"></p>
+</form>
+{% endblock content %}

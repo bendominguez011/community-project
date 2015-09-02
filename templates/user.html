@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Hello, {{ user.username }}</h1>
+<p>Here are your posts:</p>
+
+{% if posts %}
+	{% for post in posts %}
+<div>
+	<h4>{{ post.title }}</h4>
+	<p>{{ post.body }}</p>
+	<p><b>--{{ user.username }}, {{ post.community.name }}</p></b>
+	<span style="color: red">
+		<button>
+			<a style="text-decoration: none" href="/community/{{post.community.name}}/post/{{post.id}}/delete">Remove Post</a>
+		</button>
+	</span>
+	<br>
+</div>
+	{% endfor %}
+{% else %}
+	<p>No posts found</p>
+{% endif %}
+{% if enough_posts %}
+	{% if posts.has_prev %}
+		<a href="/user/{{posts.prev_num}}">{{ posts.prev_num }}</a>
+	{% else %}
+		Newer Posts
+	{% endif %}
+	{% if posts.has_next %}
+		<a href="/user/{{posts.next_num}}">{{ posts.next_num }}</a>
+	{% else %}
+		Older Posts
+	{% endif %}
+{% endif %}
+</ul>
+
+{% endblock %}

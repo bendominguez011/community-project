@@ -1,0 +1,7 @@
+{% extends "community.html" %}
+{% block content %}
+<h4>Search results for {{ query }}</h4>
+{% for post in results %}
+	<li><a href="/community/{{community}}/post/{{post.id}}">{{ post.title }}</a></li>
+{% endfor %}
+{% endblock content %}

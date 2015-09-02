@@ -1,0 +1,31 @@
+nav {
+	position: relative;
+	bottom: 50px;
+	right: 20px;
+}
+nav li {
+    display: inline;
+    border: solid;
+    border-width: 1px 3px 0px 1px;
+    margin: 0px 10px 0 0;
+}
+
+nav li a {
+    padding: 0 10px;
+}
+
+#selected {
+    padding-bottom: 1px; 
+    background: white;
+}
+
+#content {
+	position: relative;
+	bottom: 20px;
+	left: 30px;
+}
+
+#slogan {
+	position: relative;
+	bottom: 50px;
+}

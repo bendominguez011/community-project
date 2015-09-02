@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super()}}
+<style type="text/css">
+#create{
+	font-size: 30px;
+}
+</style>
+{% endblock head %}
+{% block content %}
+<ul>
+<li><a id="create" href="{{ url_for('create_community') }}">Create a new community</a></li>
+</ul>
+<p>Or</p>
+<p>Welcome to the list of communities</p>
+<ul>
+{% for c in communities %}
+	<li><a href="/community/{{c.name}}"> {{c.name}} </a></li>
+{% endfor %}
+</ul>
+{% endblock content %}

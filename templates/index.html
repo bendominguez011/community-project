@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+	{% if user %}
+	<p>Hello {{user}}, this is your index page.</p>
+	{% else %}
+	<p> Hello World, this is your index page </p>
+	{% endif %}
+{% if posts %}
+<ul>
+{% for post in posts.items %}
+<li style="list-style-type: none">
+	<a href="/community/{{post.community.name}}/{{post.id}}">{{post.title}}</a>
+</li>
+{% endfor %}
+{% if posts.has_prev %}
+<a href="{{ url_for('index', page=posts.prev_num) }}">{{ posts.prev_num }}</a>
+{% else %}
+Newer Posts
+{% endif %}
+{% if posts.has_next %}
+<a href="{{ url_for('index', page=posts.next_num) }}">{{ posts.next_num }}</a>
+{% else %}
+Older Posts
+{% endif %}
+</ul>
+{% endif %}
+{% endblock content %}

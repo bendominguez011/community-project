@@ -1,0 +1,8 @@
+{% extends "community.html" %}
+{% block content %}
+<h1>Top users</h1>
+<ol>
+{% for user in users %}
+<li>{{ user.username }}</li>
+{% endfor %}
+{% endblock content %}
