@@ -395,7 +395,9 @@ def search_community_results(community, query, delta):
 
 @app.route('/community/<community>/post/<int:post_id>')
 def show_community_post(community, post_id):
-    return "post %i" % post_id
+    c = Community.query.filter_by(name=community).first()
+    post = Posts.query.get(post_id)
+    return render_template("show_post.html", c=c, post=post)
 
 @app.route('/community/<community>/post/<int:post_id>/delete')
 def delete_community_post(community, post_id):
