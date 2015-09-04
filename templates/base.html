@@ -20,7 +20,11 @@
 </header>
 	<nav role="navigation">
 		 <ul class="nav nav-tabs">
-		     <li role="presentation"><a href="{{ url_for('index') }}">home <span class="badge">0<!--Pass a new posts variable--></span></a></li>
+			{% if current_user.is_authenticated() %}
+		     <li role="presentation"><a href="{{ url_for('index') }}">home <span class="badge">{{ session.original_number_of_posts - current_user.render_all_community_posts().all()|length }}</span></a></li>
+			 {% else %}
+			 <li role="presentation"><a href="{{ url_for('index') }}">home</a></li>
+			 {% endif %}
 			 <li role="presentation"><a href="{{ url_for('communities') }}">communities</a></li>
 			{% if current_user.is_authenticated() %}
 				<li role="presentation"><a href="{{ url_for('user_profile')}}">user history</a></li>

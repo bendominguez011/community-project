@@ -152,14 +152,16 @@ def signup_check():
 @app.route('/')
 @app.route('/<int:page>')
 def index(page=1):
-    posts = None
+    paginated_posts = None
     enough_posts = False
     if g.user and g.user.is_authenticated():
         user = g.user
-        posts = user.render_all_community_posts().paginate(page, POSTS_PER_PAGE, False)
-        enough_posts = len(user.render_all_community_posts().all()) > 3
+        posts = user.render_all_community_posts()
+        session['original_number_of_posts'] = len(posts.all())
+        paginated_posts = posts.paginate(page, POSTS_PER_PAGE, False)
+        enough_posts = len(posts.all()) > 3
     kwargs = {
-        'posts': posts,
+        'posts': paginated_posts,
         'title': None,
         'enough_posts': enough_posts
     }
