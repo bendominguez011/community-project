@@ -1,5 +1,5 @@
 # in progress web app
-This is an in-progress and nameless 😢 web app I worked on this summer. It works much like reddit, users can join or create communities and post to them. Users are able to create accounts and login and are rendered a feed of new posts from communities they are joined to.
+This is an in-progress and nameless 😢 web app I worked on this summer. It is being developed using the Python web framework Flask. It works much like reddit, users can join or create communities and post to them. Users are able to create accounts and login and are rendered a feed of new posts from communities they are joined to.
 * Database migrations uses Alembic
 * Frontend uses Bootstrap
 
@@ -32,10 +32,16 @@ $ flask/bin/pip install flask-bcrypt
 ```
 install Bootstrap however you like, though it has to be under the static folder
 
+to run the development server simply execute app.py from the virtual environment
+```
+$ flask/bin/python app.py
+```
+
 
 #alembic migration commands
 
 [alembic documentation](https://alembic.readthedocs.org/en/latest/tutorial.html#running-our-first-migration) for specific instructions on how to run migrations
+
 auto-generate is configured though, so no need to write your own migrations, just make sure your read over the migration script before upgrading. The command for auto-generating revisions is below.
 ```
 $ alembic revision --autogenerate -m "what you changed"
