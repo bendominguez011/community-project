@@ -28,7 +28,6 @@ lm.login_message = 'Please login tho'
 POSTS_PER_PAGE = 3
 FAQ_DIRECTORY = os.path.join(os.path.dirname(__file__), 'FAQ_uploads')
 
-""" error handler views """
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -36,9 +35,8 @@ def page_not_found(error):
 @app.errorhandler(500)
 def internal(error):
     return render_template('500.html'), 500
-""" end of error handler views"""
-""" authenticate with google views """
 
+# used for authenticating with google
 @app.route('/login/google')
 def authenticate_with_google():
     if 'credentials' not in session:
@@ -69,9 +67,6 @@ def oauth2callback():
         session['credentials'] = credentials.to_json()
         return redirect(url_for('authenticate_with_google'))
 
-""" end of authenticate with google views """
-
-""" logging in views """
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -79,15 +74,13 @@ def load_user(id):
 @app.before_request
 def before_request():
     g.user = current_user
+    #set instances of these forms globally, since they show up on the base template
     g.search_form = SearchForm()
     g.join_form = JoinForm()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    #this doesnt work, dont know why
-    """if form.validate_on_submit():
-        flash("Login requested for username='%s', password='%s', remember me='%s'" % (form.username.data, form.password.data, str(form.remember_me.data)))"""
     return render_template('login.html', title='login page', form=form)
 
 @app.route('/login/check', methods=['GET', 'POST'])
@@ -95,6 +88,8 @@ def login_check():
     username = request.form['username']
     user = User.query.filter_by(username=username).first()
     if user:
+        # checking if hash(passsword inputed) is equal to the hash of the password on the database for the given username
+        # returns True or False
         check_hash = bcrypt.check_password_hash(user.password, request.form['password'])
         if check_hash == True:
             login_user(user)
@@ -110,6 +105,7 @@ def login_check():
 @app.route('/logout')
 def logout():
     logout_user()
+    # clear session for community base templates
     session.clear()
     return redirect(url_for('index'))
 
@@ -120,11 +116,13 @@ def signup():
 
 @app.route('/signup/check', methods=['GET', 'POST'])
 def signup_check():
+    # check to see if there are any spaces or special characters in the requested username
     try:
         check_special_and_spaces(request.form['username'])
     except FormNotValidError as e:
         flash(e.args[0])
         return redirect(url_for('signup'))
+    # checks to see if password has at least one capital and one number
     try:
         check_password(request.form['password'])
     except FormNotValidError as e:
@@ -147,7 +145,7 @@ def signup_check():
         flash("Username already taken. Please try again")
         return redirect(url_for('signup'))
 
-""" end of logging in views """
+
 
 @app.route('/')
 @app.route('/<int:page>')
@@ -157,6 +155,7 @@ def index(page=1):
     if g.user and g.user.is_authenticated():
         user = g.user
         posts = user.render_all_community_posts()
+        # this is for banner support, doesnt work yet as of now
         session['original_number_of_posts'] = len(posts.all())
         paginated_posts = posts.paginate(page, POSTS_PER_PAGE, False)
         enough_posts = len(posts.all()) > 3
@@ -188,6 +187,7 @@ def create_new_post(community):
     if postform.validate_on_submit():
         user = g.user
         post = Posts(title=request.form['title'], body=request.form['body'], author=user, community=c)
+        # users can only post if they a part of the community
         if c.is_joined(user):
             db.session.add(post)
             db.session.commit()
@@ -201,9 +201,10 @@ def create_new_post(community):
     }
     return render_template('new_post.html', **kwargs)
 
-""" community views """
+
 @app.route('/community')
 def communities():
+    # renders a list of communities
     communities = Community.query.all()
     return render_template('communities.html', communities=communities)
 
@@ -211,6 +212,7 @@ def communities():
 @app.route('/community/<community>/<int:page>', methods=['GET', 'POST'])
 def community(community, page=1):
     user = g.user
+    # get community instance from the name of the community in the url
     c = Community.query.filter_by(name=community).first()
     if c is None:
         flash("community %s not found" % community)
@@ -250,10 +252,13 @@ def create_community():
     filename = None
     if form.validate_on_submit():
         if request.files['FAQ']:
+            # split the file into its extension and filename
             file = request.files['FAQ']
             extension = file.filename.split('.')[1]
             file_part = file.filename.split('.')[0]
+            # user must submit a .txt file that has the same filename as the name of the community being created
             if extension == "txt" and file_part == request.form['name']:
+                # secure and save the file to the directory FAQ_DIRECTORY so it can be retrieved later
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(FAQ_DIRECTORY, filename))
             else:
@@ -262,6 +267,8 @@ def create_community():
         community = Community.query.filter_by(name=request.form['name']).first()
         if community is None:
             try:
+                #check to make sure no spaces or special characters
+                #check to make sure (if there is a password) that there is at least one capital and one number
                 check_special_and_spaces(request.form['name'])
                 check_special_and_spaces(request.form['password'])
             except FormNotValidError as e:
@@ -286,6 +293,7 @@ def create_community():
 @app.route('/community/<community>/top_users')
 def top_users(community):
     c = Community.query.filter_by(name=community).first()
+    # returns a list of users that have the most posts in the community
     users = c.find_top_users()
     kwargs = {
         'users': users,
@@ -297,6 +305,7 @@ def top_users(community):
 @app.route('/community/<community>/add_moderators', methods=['GET', 'POST'])
 @login_required
 def add_moderators(community):
+    # if the user is not the founder, raise 404 error
     if not 'FOUNDER_MODE' in session:
         abort(404)
     assign_mod_form = AddModeratorForm()
@@ -304,6 +313,7 @@ def add_moderators(community):
     if assign_mod_form.validate_on_submit():
         username = request.form['username']
         user = User.query.filter_by(username=username).first()
+        # check if user exists and if they are joined to the community to are going to be a mod of
         if user and c.is_joined(user):
             c.moderators.append(user)
             db.session.commit()
@@ -311,6 +321,7 @@ def add_moderators(community):
         else:
             flash("user does not exist or not a part of the community")
     try:
+        #moderators can only be added for every 30 users in the comunity, unless there are no moderators yet
         thirty_to_one_ratio = len(c.users.all())/len(c.moderators.all())
     except ZeroDivisionError:
         thirty_to_one_ratio = None
@@ -318,6 +329,7 @@ def add_moderators(community):
         kwargs = {
             'community': community,
             'c': c,
+            #if >30:1 ratio for users to moderators, send through th eassin mod form
             'assign_mod_form': assign_mod_form,
                 }
         return render_template('add_moderators.html', **kwargs)
@@ -328,8 +340,10 @@ def add_moderators(community):
 @app.route('/community/<community>/FAQ')
 def FAQ(community):
     c = Community.query.filter_by(name=community).first()
+    #check safely if FAQ file exists
     try:
         file = c.FAQ
+        # open the file as read only and set to an object
         contents = open(file, 'r')
     except IOError:
         flash("No FAQ for community %s" % c.name)
@@ -344,12 +358,16 @@ def FAQ(community):
 
 @app.route('/search/<query>/<delta>')
 def search_all(query, delta):
+    #convert delta to int/check if its unicode
+    # if its unicode then no time filter was set
+    #anticipating an error if delta is passed as None, because no time filter is set
     try:
         delta = int(delta)
         check_delta = True
     except ValueError:
         check_delta = False
     if check_delta:
+        # if delta is an int search this way
        results = Posts.search_by_time_delta(Posts.search_all, delta, query)
        flash("searched by time delta")
     else:
@@ -362,7 +380,10 @@ def search_community(community):
     if not g.search_form.validate_on_submit():
         return redirect(url_for('community', community=community))
     if request.method == 'POST':
+        #get their choice for the time filter
         delta = dict(time_choices).get(g.search_form.time_search.data)
+        #safely check if community search is selected
+        # if filter by community is not selected, search all
         if bool(request.form.get('community_search', None)) is False:
             return redirect(url_for('search_all', query=request.form['search'], delta=delta))
         kwargs = {
@@ -374,7 +395,7 @@ def search_community(community):
 
 @app.route('/community/<community>/search/<query>/<delta>')
 def search_community_results(community, query, delta):
-    #anticipating an error if delta is passed as None, because no time filter is set
+    #same thing as above, check if delta is an int or unicode
     try:
         delta = int(delta)
         check_delta = True
@@ -382,6 +403,7 @@ def search_community_results(community, query, delta):
         check_delta = False
     c = Community.query.filter_by(name=community).first()
     if check_delta:
+        # same thing, if time filter is present search by time delta
        results = Posts.search_by_time_delta(Posts.search_by_community, delta, query, c)
        flash("searched by time delta")
     else:
@@ -408,9 +430,9 @@ def delete_community_post(community, post_id):
     db.session.commit()
     return redirect(url_for('user_profile'))
 
-""" end of community views """
 
 if __name__ == '__main__':
+    #avoid circular imports
     from models import User, Bcrypt, Posts, Community
     from models import db, bcrypt
     app.run(host='0.0.0.0', debug=True)
