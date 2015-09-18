@@ -49,21 +49,24 @@ class Community(db.Model):
         self.time_founded = datetime.datetime.utcnow()
         self.FAQ = FAQ
         self.description = description
+        #if a password is set, then the community is private, hash the password
         if self.password:
             self.private = True
             self.password = bcrypt.generate_password_hash(self.password)
         else:
             self.private = False
-
+    #checks if a user is joined to a community, returns True if the user is, False if not
     def is_joined(self, user):
         return self.users.filter_by(username=user.username).count() != 0
 
+    #if user is not already joined, add users user to the community
     def join(self, user):
         if not self.is_joined(user):
             self.users.append(user)
             db.session.commit()
             return self
 
+    #if user is joined, removes user from the community
     def leave(self, user):
         if self.is_joined(user):
             if self.is_moderator(user):
@@ -72,29 +75,35 @@ class Community(db.Model):
             db.session.commit()
             return self
 
+    #checks if a user is a moderator of a community
     def is_moderator(self, user):
         return self.moderators.filter_by(username=user.username).count() != 0
 
+    #adds a user as a moderator, user must first be joined to the community, though.
     def assign_moderator(self, user):
         if self.is_joined(user):
             self.moderators.append(user)
             db.session.commit()
             return self
 
+    #removes user as moderator if he/she is a moderator
     def remove_moderator(self, user):
         if self.is_moderator(user):
             self.moderators.remove(user)
             db.session.commit()
             return self
 
+    #returns a list of tuples of the users that post the most in the community, and the number of posts
     def find_top_users(self):
         users = self.users.all()
         top_users = []
         for user in users:
             top_users.append((user.posts.filter_by(community=self).count(), user))
         top_users = sorted(top_users, reverse=True)
+        #if there are less than 3 users that have posted in the community, add empty tuples to the list instead
         while len(top_users) < 3:
             top_users.append((None, None))
+        #at index 0 is the top user, 1 the second, 2 the third, and then the 1 index after gives us their number of posts. so the function returns a tuple with order (user, num_of_posts)
         return [top_users[0][1], top_users[1][1], top_users[2][1]]
 
     def __repr__(self):
@@ -116,6 +125,7 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return unicode(self.id)
 
+    #return all community posts for every community a specific user is joined to, and then sort them by newest
     def render_all_community_posts(self):
         return Posts.query.join(Community).\
         join(Community.users).\
@@ -143,15 +153,19 @@ class Posts(db.Model):
         self.community = community
         self.time_created = datetime.datetime.utcnow()
 
+    #search all posts in database for a query
     @staticmethod
     def search_all(search):
         return Posts.query.whoosh_search(search)
 
+    #search all posts belonging to a given community in database for a query
     @staticmethod
     def search_by_community(search, community):
         return Posts.query.whoosh_search(search).\
         filter(Posts.community_id == community.id)
 
+    #search by the time difference in days given, so if delta is 7, this function will search all posts in the past week
+    #the function also takes either search_by_community or search_all with their arguments as arguments, so a user can filter by time and community
     @staticmethod
     def search_by_time_delta(func, delta, *args):
         past = datetime.date.today() - datetime.timedelta(delta)
