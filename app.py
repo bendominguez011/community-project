@@ -346,7 +346,7 @@ def FAQ(community):
         file = c.FAQ
         # open the file as read only and set to an object
         contents = open(file, 'r')
-    except IOError:
+    except IOError or TypeError:
         flash("No FAQ for community %s" % c.name)
         return redirect(url_for('community', community=community))
     kwargs = {

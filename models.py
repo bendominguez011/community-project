@@ -4,13 +4,19 @@ from app import app
 from flask.ext.login import UserMixin
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
-import flask.ext.whooshalchemy as whoosh
 import datetime
 
-base_directory = os.path.abspath(os.path.dirname(__file__))
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_directory, 'app.db')
+search_enabled = os.environ.get('HEROKU') is None
+if search_enabled:
+    import flask.ext.whooshalchemy as whoosh
+    app.config['WHOOSH_BASE'] = os.path.join(base_directory, 'search.db')
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app.db')
+if os.environ.get('DATABASE_URL') is not None:
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-app.config['WHOOSH_BASE'] = os.path.join(base_directory, 'search.db')
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
@@ -174,4 +180,5 @@ class Posts(db.Model):
     def __repr__(self):
         return '<Post %r>' % self.title
 
-whoosh.whoosh_index(app, Posts)
+if search_enabled:
+    whoosh.whoosh_index(app, Posts)
