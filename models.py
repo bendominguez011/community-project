@@ -3,7 +3,7 @@ import datetime
 from app import app
 from flask.ext.login import UserMixin
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.bcrypt import Bcrypt
+#from flask.ext.bcrypt import Bcrypt
 import flask.ext.whooshalchemy as whoosh
 import datetime
 
@@ -12,7 +12,7 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_directory, 'app.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['WHOOSH_BASE'] = os.path.join(base_directory, 'search.db')
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+#bcrypt = Bcrypt(app)
 
 users_and_communities = db.Table('users',
     db.Column('user_id', db.Integer, db.ForeignKey('community.id')),

@@ -5,10 +5,10 @@ from flask import current_app, render_template, url_for, flash, session, request
 from flask.ext.login import LoginManager
 from flask.ext.login import login_user, logout_user, current_user, login_required
 #google imports
-from oauth2client import client
+#from oauth2client import client
 import json
-import httplib2
-from apiclient import discovery
+#import httplib2
+#from apiclient import discovery
 from forms import LoginForm, NewPostForm, JoinForm, NewCommunityForm, AddModeratorForm, SearchForm
 from forms import time_choices
 #end of google imports
@@ -28,6 +28,7 @@ lm.login_message = 'Please login tho'
 POSTS_PER_PAGE = 3
 FAQ_DIRECTORY = os.path.join(os.path.dirname(__file__), 'FAQ_uploads')
 
+#render these templates when http status code is raised
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -37,7 +38,7 @@ def internal(error):
     return render_template('500.html'), 500
 
 # used for authenticating with google
-@app.route('/login/google')
+"""@app.route('/login/google')
 def authenticate_with_google():
     if 'credentials' not in session:
         return redirect(url_for('oauth2callback'))
@@ -66,7 +67,7 @@ def oauth2callback():
         credentials = flow.step2_exchange(auth_code)
         session['credentials'] = credentials.to_json()
         return redirect(url_for('authenticate_with_google'))
-
+"""
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -433,6 +434,8 @@ def delete_community_post(community, post_id):
 
 if __name__ == '__main__':
     #avoid circular imports
-    from models import User, Bcrypt, Posts, Community
-    from models import db, bcrypt
+    from models import User, Posts, Community
+    #from models import Bcrypt
+    from models import db
+    #from models import bcrypt
     app.run(host='0.0.0.0', debug=True)
