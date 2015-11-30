@@ -153,7 +153,7 @@ def signup_check():
 def index(page=1):
     paginated_posts = None
     enough_posts = False
-    if g.user and g.user.is_authenticated():
+    if g.user and g.user.is_authenticated:
         user = g.user
         posts = user.render_all_community_posts()
         # this is for banner support, doesnt work yet as of now
@@ -219,7 +219,7 @@ def community(community, page=1):
         flash("community %s not found" % community)
         return redirect(url_for('index'))
     #checking if the user is logged in to avoid an AttributeError
-    if user and user.is_authenticated():
+    if user and user.is_authenticated:
         session['user'] = user.username
         session['joined'] = c.is_joined(user)
     if c.founder == user:
@@ -435,7 +435,7 @@ def delete_community_post(community, post_id):
 if __name__ == '__main__':
     #avoid circular imports
     from models import User, Posts, Community
-    #from models import Bcrypt
+    from models import Bcrypt
     from models import db
-    #from models import bcrypt
+    from models import bcrypt
     app.run(host='0.0.0.0', debug=True)

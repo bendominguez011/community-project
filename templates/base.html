@@ -17,23 +17,21 @@
 <header>
 	<img src="static/cartoon_sloth.jpg" height="200px" width="270px">
 	<div id="slogan"><h3 style="color: #79c879"> Create your own internet community today.</h1></div>
+	<div id="slogan"><a href="https://github.com/bendominguez011/no-name-web-app" style="color: #79c879">Source Code</a></div>
 </header>
 	<nav role="navigation">
 		 <ul class="nav nav-tabs">
-			{% if current_user.is_authenticated() %}
-		     <li role="presentation"><a href="{{ url_for('index') }}">home <span class="badge">{{ session.original_number_of_posts - current_user.render_all_community_posts().all()|length }}</span></a></li>
-			 {% else %}
+			{% if current_user.is_authenticated %}
 			 <li role="presentation"><a href="{{ url_for('index') }}">home</a></li>
 			 {% endif %}
 			 <li role="presentation"><a href="{{ url_for('communities') }}">communities</a></li>
-			{% if current_user.is_authenticated() %}
+			{% if current_user.is_authenticated %}
 				<li role="presentation"><a href="{{ url_for('user_profile')}}">user history</a></li>
 				<li role="presentation"><a href="{{ url_for('logout') }}">logout</a></li>
 			{% else %}
 				<li role="presentation"><a href="{{ url_for('login') }}">login</a></li>
 				<li role="presentation"><a href="{{ url_for('user_profile')}}">access your profile</a></li>
 			{% endif %}
-				<li role="presentation"><a href="{{ url_for('authenticate_with_google') }}">authenticate with google</a></li>
 		 </ul>
 	</nav>
 {% with messages = get_flashed_messages() %}
