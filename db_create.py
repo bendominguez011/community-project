@@ -1,6 +1,7 @@
 from models import db
 from models import User, Posts, Community
 
+db.session.rollback()
 db.drop_all()
 db.create_all()
 u = User('ben', '_apples1')
