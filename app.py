@@ -1,4 +1,4 @@
-import os
+import os, sys, logging
 import types
 from flask import Flask, Response
 from flask import current_app, render_template, url_for, flash, session, request, redirect, g, abort, send_from_directory
@@ -27,6 +27,9 @@ lm.login_view = 'login'
 lm.login_message = 'Please login tho'
 POSTS_PER_PAGE = 3
 FAQ_DIRECTORY = os.path.join(os.path.dirname(__file__), 'FAQ_uploads')
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 #render these templates when http status code is raised
 @app.errorhandler(404)
