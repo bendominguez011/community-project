@@ -6,6 +6,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 import datetime
 
+base_directory = os.path.abspath(os.path.dirname(__file__))
+
 search_enabled = os.environ.get('HEROKU') is None
 if search_enabled:
     import flask.ext.whooshalchemy as whoosh
