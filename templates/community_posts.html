@@ -2,8 +2,12 @@
 {% block content %}
 <ul>
 {% for post in posts.items %}
+	<hr>
+	<div id="post">
 	<li><a href="/community/{{community}}/post/{{post.id}}">{{ post.title }}</a></li>
+	</div>
 {% endfor %}
+<hr>
 </ul>
 {% if enough_posts %}
 
@@ -12,7 +16,7 @@
 	{% else %}
 		Newer Posts
 	{% endif %}
-	
+
 	{% if posts.has_next %}
 		<a href="/community/{{community}}/{{posts.next_num}}">{{ posts.next_num }}</a>
 	{% else %}

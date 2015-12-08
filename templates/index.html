@@ -9,9 +9,11 @@
 <ul>
 {% for post in posts.items %}
 <li style="list-style-type: none">
-	<a href="/community/{{post.community.name}}/{{post.id}}">{{post.title}}</a>
+	<hr>
+	<a href="/community/{{post.community.name}}/{{post.id}}">{{post.title}}, community: {{post.community.name}}</a>
 </li>
 {% endfor %}
+<hr>
 {% if posts.has_prev %}
 <a href="{{ url_for('index', page=posts.prev_num) }}">{{ posts.prev_num }}</a>
 {% else %}
