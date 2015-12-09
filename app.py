@@ -441,4 +441,4 @@ if __name__ == '__main__':
     from models import Bcrypt
     from models import db
     from models import bcrypt
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=True)
