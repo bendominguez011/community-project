@@ -42,7 +42,7 @@ app.secret_key = os.urandom(7)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
-from models import User, Community
+from models import User, Community, Posts
 
 lm = LoginManager()
 lm.init_app(app)
@@ -66,37 +66,6 @@ def page_not_found(error):
 def internal(error):
     return render_template('500.html'), 500
 
-# used for authenticating with google
-"""@app.route('/login/google')
-def authenticate_with_google():
-    if 'credentials' not in session:
-        return redirect(url_for('oauth2callback'))
-    credentials = client.OAuth2Credentials.from_json(session['credentials'])
-    if credentials.access_token_expired:
-        return redirect(url_for('oauth2callback'))
-    else:
-        http_auth = credentials.authorize(httplib2.Http())
-        drive_service = discovery.build('drive', 'v2', http_auth)
-        files = drive_service.files.list().execute()
-        return json.dumps(files)
-
-@app.route('/oauth2callback')
-def oauth2callback():
-    flow = client.flow_from_clientsecrets(
-    'client_secrets.json',
-    scope='https://www.googleapis.com/auth/drive.metadata.readonly',
-    #redirect_uri=url_for('oauth2callback', _external=True)
-    redirect_uri='https://www.example.com/oauth2callback'
-    )
-    if 'code' not in request.args:
-        auth_uri = flow.step1_get_authorize_url()
-        return redirect(auth_uri)
-    else:
-        auth_code = request.args.get('code')
-        credentials = flow.step2_exchange(auth_code)
-        session['credentials'] = credentials.to_json()
-        return redirect(url_for('authenticate_with_google'))
-"""
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
