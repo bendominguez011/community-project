@@ -1,4 +1,4 @@
-from models import db
+from app import db
 from models import User, Posts, Community
 
 db.session.rollback()

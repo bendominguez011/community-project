@@ -1,3 +1,4 @@
+
 import os, sys, logging
 import types
 from flask import Flask, Response
@@ -16,9 +17,33 @@ from check_forms import check_password, check_special_and_spaces
 from check_forms import FormNotValidError
 from datetime import datetime
 from werkzeug import secure_filename
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.bcrypt import Bcrypt
+
+
+base_directory = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
+
+search_enabled = os.environ.get('HEROKU') is None
+if search_enabled:
+    import flask.ext.whooshalchemy as whoosh
+    app.config['WHOOSH_BASE'] = os.path.join(base_directory, 'search.db')
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app.db')
+if os.environ.get('DATABASE_URL') is not None:
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+
+
 app.secret_key = os.urandom(7)
+
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+
+from models import User, Community
+
 lm = LoginManager()
 lm.init_app(app)
 WTF_CRSF_ENABLED = True
@@ -27,6 +52,7 @@ lm.login_view = 'login'
 lm.login_message = 'Please login tho'
 POSTS_PER_PAGE = 3
 FAQ_DIRECTORY = os.path.join(os.path.dirname(__file__), 'FAQ_uploads')
+
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
@@ -433,12 +459,3 @@ def delete_community_post(community, post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('user_profile'))
-
-
-if __name__ == '__main__':
-    #avoid circular imports
-    from models import User, Posts, Community
-    from models import Bcrypt
-    from models import db
-    from models import bcrypt
-    app.run(host='0.0.0.0', debug=True)
