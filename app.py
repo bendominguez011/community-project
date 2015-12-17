@@ -27,9 +27,6 @@ base_directory = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 search_enabled = os.environ.get('HEROKU') is None
-if search_enabled:
-    import flask.ext.whooshalchemy as whoosh
-    app.config['WHOOSH_BASE'] = os.path.join(base_directory, 'search.db')
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app.db')
 if os.environ.get('DATABASE_URL') is not None:
@@ -81,6 +78,7 @@ def before_request():
     #set instances of these forms globally, since they show up on the base template
     g.search_form = SearchForm()
     g.join_form = JoinForm()
+    g.search_enabled = search_enabled
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

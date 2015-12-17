@@ -30,6 +30,7 @@
 				<li> <a href="/">home</a></li>
 	    </ul>
 	</div>
+{% if g.search_enabled %}
 <div id='search'>
     <form action="/community/{{community}}/search" method="post" name="search">
 				{{g.search_form.hidden_tag()}}
@@ -41,10 +42,11 @@
 		</p>
 		<label for="title">{{g.search_form.time_search.label}}</label>
 				{{ g.search_form.time_search }}
-		</div>
+</div>
 		<p> <input type="submit" value="search"/></p>
 		</form>
-        <br>
+		<br>
+{% endif %}
         <a href="/community/{{community}}/FAQ">FAQ</a>
 		<br>
 		<ul>

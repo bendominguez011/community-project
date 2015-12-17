@@ -6,6 +6,12 @@ from flask.ext.bcrypt import Bcrypt
 import datetime
 
 from app import db, bcrypt
+from app import base_directory, search_enabled
+from app import app
+
+if search_enabled:
+    import flask.ext.whooshalchemy as whoosh
+    app.config['WHOOSH_BASE'] = os.path.join(base_directory, 'search.db')
 
 users_and_communities = db.Table('users',
     db.Column('user_id', db.Integer, db.ForeignKey('community.id')),
@@ -166,3 +172,6 @@ class Posts(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % self.title
+
+if search_enabled:
+    whoosh.whoosh_index(app, Posts)
