@@ -1,21 +1,18 @@
 {% extends "base.html" %}
 {% block head %}
 {{ super()}}
-<style type="text/css">
-#create{
-	font-size: 30px;
-}
-</style>
 {% endblock head %}
 {% block content %}
-<ul>
-<li><a id="create" href="{{ url_for('create_community') }}">Create a new community</a></li>
-</ul>
+<div style="position:relative; left: 125px;">
+<a id="create" href="{{ url_for('create_community') }}">Create a new community</a><br>
 <p>Or</p>
-<p>Welcome to the list of communities</p>
-<ul>
+<p>Browse the list of communities:</p>
+</div>
+<div style="position: relative; left: 85px;">
+<ul style="list-style-type: none">
 {% for c in communities %}
 	<li><a href="/community/{{c.name}}"> {{c.name}} </a></li>
 {% endfor %}
 </ul>
+</div>
 {% endblock content %}

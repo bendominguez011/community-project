@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<div style="position: relative; left: 125px;">
 <h1>Create an account </h1>
 <form action="/signup/check" method="post" name="login">
 	{{ form.hidden_tag() }}
@@ -17,9 +18,9 @@
 		<span style="color: red;">[{{ error }}]</span>
 		{% endfor %}
 		</p>
-		
+
 	<p>{{ form.remember_me }}Remember Me</p>
 	<p><input type="submit" value="Submit"></p>
 	</form>
-	
+</div>	
 {% endblock content %}

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-	{% if user %}
-	<p>Hello {{user}}, this is your index page.</p>
+	<div style="position: relative; left: 125px;"
+	{% if g.user %}
+	<p>Hello {{g.user.username}}, this is your index page.</p>
 	{% else %}
-	<p> Hello World, this is your index page </p>
+	<p> Welcome! This is the default index page. </p>
 	{% endif %}
+	</div>
 {% if posts %}
+<div style="position: relative; left: 85px;">
 <ul>
 {% for post in posts.items %}
 <li style="list-style-type: none">
@@ -14,6 +17,7 @@
 </li>
 {% endfor %}
 <hr>
+
 {% if posts.has_prev %}
 <a href="{{ url_for('index', page=posts.prev_num) }}">{{ posts.prev_num }}</a>
 {% else %}
@@ -26,4 +30,5 @@ Older Posts
 {% endif %}
 </ul>
 {% endif %}
+</div>
 {% endblock content %}

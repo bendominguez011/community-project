@@ -1,7 +1,7 @@
 nav {
 	position: relative;
-	bottom: 50px;
-	right: 20px;
+	bottom: 0px;
+	left: 20px;
 }
 nav li {
     display: inline;
@@ -15,7 +15,7 @@ nav li a {
 }
 
 #selected {
-    padding-bottom: 1px; 
+    padding-bottom: 1px;
     background: white;
 }
 

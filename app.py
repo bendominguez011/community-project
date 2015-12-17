@@ -58,6 +58,10 @@ FAQ_DIRECTORY = os.path.join(os.path.dirname(__file__), 'FAQ_uploads')
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
+@app.route('/authenticate_with_google')
+def authenticate_with_google():
+    return render_template('google.html')
+
 #render these templates when http status code is raised
 @app.errorhandler(404)
 def page_not_found(error):
