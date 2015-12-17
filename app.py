@@ -19,6 +19,7 @@ from datetime import datetime
 from werkzeug import secure_filename
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
+from secret import secret_key
 
 
 base_directory = os.path.abspath(os.path.dirname(__file__))
@@ -37,7 +38,7 @@ if os.environ.get('DATABASE_URL') is not None:
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 
 
-app.secret_key = os.urandom(7)
+app.secret_key = secret_key
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
