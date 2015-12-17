@@ -1,4 +1,5 @@
 *.db
 *.pyc
 flask
-banana.py
+secret.py
+
