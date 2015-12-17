@@ -1,2 +1,0 @@
-"""secret key used for deployment"""
-secret_key = '\xa8K\xf4\xd8`\\x87~Um\xc9\\x08\xb6Y\\\xee\xf88\xa4\xf2\\x93/Pi\xbe'
