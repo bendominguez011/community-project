@@ -31,11 +31,20 @@
 			<li role="presentation"><a href="{{ url_for('authenticate_with_google')}}">authenticate with google</a></li>
 		 </ul>
 	</nav>
+	{% if request.MOBILE %}
+		<div id="slogan"><h3 style="color: #79c879">An actual small-world network><a style="color: #336699; font-size: 18px;" href="https://github.com/bendominguez011/no-name-web-app" style="color: #79c879">Source Code</a></h1><img src="static/cartoon_sloth.jpg" height="190px" width="270px"></div>
+		<hr align= "left" width="45%">
+	{% else %}
 	<div id="slogan" style="position: relative; left: 125px;"><h3 style="color: #79c879">An actual small-world network. <a style="color: #336699; font-size: 18px;" href="https://github.com/bendominguez011/no-name-web-app" style="color: #79c879">Source Code</a></h1><img src="static/cartoon_sloth.jpg" height="190px" width="270px"></div>
 	<hr align="left" width="45%" style="position: relative; left: 125px;">
+	{% endif %}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div style="position: relative; left: 85px;">
+	{% if request.MOBILE %}
+		<div>
+	{% else %}
+		<div style="position: relative; left: 85px;">
+{% endif %}
 	<ul style="list-style-type: none">
 		{% for message in messages %}
 		<li>{{ message }} </li>
