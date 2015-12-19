@@ -20,6 +20,7 @@ from werkzeug import secure_filename
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 from secret import secret_key
+from flask.ext.mobility.decorators import mobile_template
 
 
 base_directory = os.path.abspath(os.path.dirname(__file__))
@@ -151,6 +152,7 @@ def signup_check():
 
 @app.route('/')
 @app.route('/<int:page>')
+@mobile_template('/{mobile/}')
 def index(page=1):
     paginated_posts = None
     enough_posts = False
