@@ -152,7 +152,6 @@ def signup_check():
 
 @app.route('/')
 @app.route('/<int:page>')
-@mobile_template('/{mobile/}')
 def index(page=1):
     paginated_posts = None
     enough_posts = False

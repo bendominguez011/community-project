@@ -27,6 +27,13 @@ moderators_and_communities = db.Table('moderators',
 #One to many between User and Posts
 #One to many between Community and Posts
 
+"""Posts have many comments, but every comment has only one post.
+Users have many comments, but every comment has only one user.
+
+One to many between Comments and Posts
+One to many between Users and Comments
+"""
+
 class Community(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=True)
