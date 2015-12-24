@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-	<div style="position: relative; left: 125px;"
+	<div style="position: relative; left: 40px;"
 	{% if g.user %}
 	<p>Hello {{g.user.username}}, this is your index page.</p>
 	{% else %}
@@ -8,7 +8,7 @@
 	{% endif %}
 	</div>
 {% if posts %}
-<div style="position: relative; left: 85px;">
+<div style="position: relative;">
 <ul>
 {% for post in posts.items %}
 <li style="list-style-type: none">

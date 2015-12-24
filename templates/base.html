@@ -17,27 +17,42 @@
 	<nav role="navigation">
 		 <ul class="nav nav-tabs">
 			{% if current_user.is_authenticated %}
-			 <li role="presentation"><a href="{{ url_for('index') }}">home</a></li>
+			 <li role="presentation"><a href="{{ url_for('index') }}">
+				 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+				 home</a></li>
 			 {% endif %}
-			 <li role="presentation"><a href="{{ url_for('communities') }}">communities</a></li>
+			 <li role="presentation"><a href="{{ url_for('communities') }}">
+				 <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+				 communities</a></li>
 			{% if current_user.is_authenticated %}
-				<li role="presentation"><a href="{{ url_for('user_profile')}}">user history</a></li>
-				<li role="presentation"><a href="{{ url_for('logout') }}">logout</a></li>
+				<li role="presentation"><a href="{{ url_for('user_profile')}}">
+				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+				user history</a></li>
+				<li role="presentation"><a href="{{ url_for('logout') }}">
+					<span class="glyphicon glyphicon-edit"></span>
+					logout</a></li>
 			{% else %}
-				<li role="presentation"><a href="{{ url_for('login') }}">login</a></li>
-				<li role="presentation"><a href="{{ url_for('user_profile')}}">access your profile</a></li>
+				<li role="presentation"><a href="{{ url_for('login') }}">
+					<span class="glyphicon glyphicon-edit"></span>
+					login</a></li>
+				<li role="presentation"><a href="{{ url_for('user_profile')}}">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					access your profile</a></li>
 
 			{% endif %}
-			<li role="presentation"><a href="{{ url_for('authenticate_with_google')}}">authenticate with google</a></li>
+			<li role="presentation"><a href="{{ url_for('authenticate_with_google')}}">
+			<span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+			authenticate with google</a></li>
 		 </ul>
 	</nav>
-	{% if request.MOBILE %}
-		<div id="slogan"><h3 style="color: #79c879">An actual small-world network><a style="color: #336699; font-size: 18px;" href="https://github.com/bendominguez011/no-name-web-app" style="color: #79c879">Source Code</a></h1><img src="static/cartoon_sloth.jpg" height="190px" width="270px"></div>
-		<hr align= "left" width="45%">
-	{% else %}
-	<div id="slogan" style="position: relative; left: 125px;"><h3 style="color: #79c879">An actual small-world network. <a style="color: #336699; font-size: 18px;" href="https://github.com/bendominguez011/no-name-web-app" style="color: #79c879">Source Code</a></h1><img src="static/cartoon_sloth.jpg" height="190px" width="270px"></div>
-	<hr align="left" width="45%" style="position: relative; left: 125px;">
-	{% endif %}
+	<div id="slogan" style="position: relative; left: 40px;">
+			<h3 style="color: #79c879">
+				<img src="static/cartoon_sloth.jpg" height="76px" width="92px">
+				"name"
+		 <a style="color: #336699; font-size: 18px;" href="https://github.com/bendominguez011/no-name-web-app" style="color: #79c879">Source Code</a>
+	 </h3>
+	 </div>
+	<hr align="left" width="45%" style="position: relative; left: 40px;">
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 	{% if request.MOBILE %}

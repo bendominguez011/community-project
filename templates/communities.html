@@ -3,12 +3,12 @@
 {{ super()}}
 {% endblock head %}
 {% block content %}
-<div style="position:relative; left: 125px;">
+<div style="position:relative; left: 40px;">
 <a id="create" href="{{ url_for('create_community') }}">Create a new community</a><br>
 <p>Or</p>
 <p>Browse the list of communities:</p>
 </div>
-<div style="position: relative; left: 85px;">
+<div style="position: relative;">
 <ul style="list-style-type: none">
 {% for c in communities %}
 	<li><a href="/community/{{c.name}}"> {{c.name}} </a></li>
