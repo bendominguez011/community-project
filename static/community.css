@@ -19,7 +19,7 @@ header {
 
 #left {
     position: relative;
-    right: 0px;
+    left: 40px;
     top: 40px;
     width: 20%;
     height: 100%;
@@ -31,8 +31,4 @@ header {
     float: right;
     width: 60%;
     height: 100%;
-}
-
-span {
-	
 }
