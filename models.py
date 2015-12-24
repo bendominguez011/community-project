@@ -121,6 +121,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100))
     time_joined = db.Column(db.DateTime)
     posts = db.relationship('Posts', backref='author', lazy='dynamic')
+    comments = db.relationship('Comments', backref='author', lazy='dynamic')
     findings = db.relationship('Community', backref='founder', lazy='dynamic')
 
     def __init__(self, username, password):
@@ -141,6 +142,8 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User %r>' % self.username
 
+
+
 class Posts(db.Model):
 
     __searchable__ = ['title']
@@ -151,6 +154,7 @@ class Posts(db.Model):
     time_created = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     community_id = db.Column(db.Integer, db.ForeignKey('community.id'))
+    comments = db.relationship('Comments', backref='post', lazy='dynamic')
 
     def __init__(self, title, body, author, community):
         self.title = title
@@ -179,6 +183,23 @@ class Posts(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % self.title
+
+class Comments(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    time_created = db.Column(db.DateTime)
+
+    def __init__(self, content, author, post):
+        self.contents = content
+        self.author = author
+        self.post = post
+        self.time_created = datetime.datetime.utcnow()
+
+    def __repr__(self):
+        return "<Contents '{0}'>".format(self.contents)
+
 
 if search_enabled:
     whoosh.whoosh_index(app, Posts)

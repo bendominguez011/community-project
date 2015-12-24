@@ -10,7 +10,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 import json
 #import httplib2
 #from apiclient import discovery
-from forms import LoginForm, NewPostForm, JoinForm, NewCommunityForm, AddModeratorForm, SearchForm
+from forms import LoginForm, NewPostForm, JoinForm, NewCommunityForm, AddModeratorForm, SearchForm, CommentForm
 from forms import time_choices
 #end of google imports
 from check_forms import check_password, check_special_and_spaces
@@ -41,7 +41,7 @@ app.secret_key = secret_key
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
-from models import User, Community, Posts
+from models import User, Community, Posts, Comments
 
 lm = LoginManager()
 lm.init_app(app)
@@ -424,7 +424,17 @@ def search_community_results(community, query, delta):
 def show_community_post(community, post_id):
     c = Community.query.filter_by(name=community).first()
     post = Posts.query.get(post_id)
-    return render_template("show_post.html", c=c, post=post)
+    form = CommentForm()
+    return render_template("show_post.html", c=c, post=post, form=form)
+
+@app.route('/community/<community>/post/<int:post_id>/comment', methods=['GET', 'POST'])
+def comment(community, post_id):
+    c = Community.query.filter_by(name=community).first()
+    user = g.user
+    post = Posts.query.get(post_id)
+    contents = request.form['content']
+    comment = Comments(contents, user, post)
+    return redirect(url_for('community', community=community))
 
 @app.route('/community/<community>/post/<int:post_id>/delete')
 def delete_community_post(community, post_id):

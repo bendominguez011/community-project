@@ -7,4 +7,19 @@
 <div>
 	<p>{{ post.body }}</p>
 </div>
+<!--<form action="/community/<community>/post/{{post.id}}/comment" method="post" name="comment">
+	<p>
+		{{ form.content(size=80) }}
+		{% for error in form.content.errors %}
+		<span style="color: red;">[{{ error }}]</span>
+		{% endfor %}
+	</p>
+	<p><input type="submit" value="Add Comment"></p>
+</form>
+<div>
+	{% for comment in post.comments %}
+		{{ comment.contents }}
+	{% endfor %}
+</div>
+-->
 {% endblock content %}

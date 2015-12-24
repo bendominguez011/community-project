@@ -3,7 +3,7 @@ import unittest
 import datetime
 from app import app
 from models import db
-from models import User, Community, Posts
+from models import User, Community, Posts, Comments
 from models import base_directory
 from flask import request, url_for
 from flask import Response
@@ -101,8 +101,10 @@ class TestCase(unittest.TestCase):
         search = Posts.search_by_time_delta(Posts.search_by_community, 31, 'Title', c)
         self.assertEqual([post2, post1], search.all())
 
-    def test_views(self):
-        pass
+    def test_comments(self):
+        u = User('user', None)
+        comment = Comments("This is a comment", author=u)
+        db.assertEqual(u, comment.author)
 
 if __name__ == '__main__':
     unittest.main()

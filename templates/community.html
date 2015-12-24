@@ -12,6 +12,7 @@
 <header>
 <div id="banner" style="position: relative; left: 40px;">
     <h1>{{ c.name }}<span style="font-size: 12px">, founded by {{ c.founder.username }} on {{c.time_founded.month}}/{{c.time_founded.day}}/{{c.time_founded.year}}</span></h1>
+
 	{% if session.user %}
     <p> Welcome, {{session.user}}!, your last visit was on 0/0/0</p>{% if session.FOUNDER_MODE %}<p style="color: red">FOUNDER MODE</p>{% endif %}
 	{% else %}
@@ -83,7 +84,7 @@
 	</ul>
 {% endif %}
 {% endwith %}
-<div>
+<div id="content">
     {% block content %}
 	{% endblock content %}
 </div>
