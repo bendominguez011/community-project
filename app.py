@@ -155,18 +155,25 @@ def signup_check():
 def index(page=1):
     paginated_posts = None
     enough_posts = False
-    if g.user and g.user.is_authenticated:
-        user = g.user
+    title = 'Home'
+    user = g.user
+    if user and user.is_authenticated:
         posts = user.render_all_community_posts()
         # this is for banner support, doesnt work yet as of now
         session['original_number_of_posts'] = len(posts.all())
         paginated_posts = posts.paginate(page, POSTS_PER_PAGE, False)
         enough_posts = len(posts.all()) > 3
-    kwargs = {
-        'posts': paginated_posts,
-        'title': None,
-        'enough_posts': enough_posts
-    }
+        kwargs = {
+            'posts': paginated_posts.items,
+            'title': title,
+            'enough_posts': enough_posts
+            }
+    else:
+        kwargs = {
+            'posts': Posts.query.all(),
+            'title': title,
+            'enough_posts': True
+        }
     return render_template('index.html', **kwargs)
 
 @app.route('/user')

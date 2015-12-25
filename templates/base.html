@@ -16,11 +16,9 @@
 <body>
 	<nav role="navigation">
 		 <ul class="nav nav-tabs">
-			{% if current_user.is_authenticated %}
 			 <li role="presentation"><a href="{{ url_for('index') }}">
 				 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 				 home</a></li>
-			 {% endif %}
 			 <li role="presentation"><a href="{{ url_for('communities') }}">
 				 <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
 				 communities</a></li>

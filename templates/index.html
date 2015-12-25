@@ -10,7 +10,7 @@
 {% if posts %}
 <div style="position: relative;">
 <ul>
-{% for post in posts.items %}
+{% for post in posts %}
 <li style="list-style-type: none">
 	<hr>
 	<a href="/community/{{post.community.name}}/{{post.id}}">{{post.title}}, community: {{post.community.name}}</a>
