@@ -10,5 +10,15 @@ post = Posts("How to Hook Grip with Mark Robb",
     community=c)
 db.session.add_all([u, c, post])
 c = Community(name="Programming", password=None, founder=u, FAQ=None, description=None)
-db.session.add(c)
+post = Posts("Rubber Ducky Code -- Intro to Flask",
+            "An intro to the flask microframework, made for those just finished with Learn Python the \
+            hard way and looking to get into web developement:: www.rubberduckycode.com",
+            author = u,
+            community = c)
+post2 = Posts("Project Euler Solutions made in python",
+            "Project euler solutions made in python can be found here https://github.com/bendominguez011/Project-Euler-Solutions",
+            author=u,
+            community=c)
+db.session.add_all([c, post, post2])
+
 db.session.commit()

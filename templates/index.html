@@ -13,7 +13,7 @@
 {% for post in posts %}
 <li style="list-style-type: none">
 	<hr>
-	<a href="/community/{{post.community.name}}/{{post.id}}">{{post.title}}, community: {{post.community.name}}</a>
+	<a href="/community/{{post.community.name}}/post/{{post.id}}">{{post.title}} <span style="color: #79c879">({{post.community.name}})</span></a>
 </li>
 {% endfor %}
 <hr>
