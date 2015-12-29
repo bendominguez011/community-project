@@ -1,5 +1,7 @@
-# in progress web app
-This is an in-progress and nameless 😢 web app I worked on this summer. It is being developed using the Python web framework Flask. It works much like reddit, users can join or create communities and post to them. Users are able to create accounts and login and are rendered a feed of new posts from communities they are joined to.
+# Community Project
+
+The code that powers Community Project -- A Social Networking Service still in beta but available to the public.
+
 * Database migrations uses Alembic
 * Frontend uses Bootstrap
 
@@ -12,7 +14,7 @@ This is an in-progress and nameless 😢 web app I worked on this summer. It is 
 * [Flask-Bcrypt](https://flask-bcrypt.readthedocs.org/en/latest/) -- bcrypt hashing
 * [Flask-WhooshAlchemy](https://github.com/gyllstromk/Flask-WhooshAlchemy) -- searching posts
 
-#setting up
+#setting up for an instance of Community Project
 
 clone the repository and set up the flask virtual environment
 ```
@@ -32,11 +34,15 @@ $ flask/bin/pip install flask-bcrypt
 ```
 install Bootstrap however you like, though it has to be under the static folder
 
-to run the development server simply execute app.py from the virtual environment
+to run the development server simply execute run.py from the virtual environment
 ```
-$ flask/bin/python app.py
+$ flask/bin/python run.py
 ```
-
+to set up the database you can use
+```
+$ flask/bin/python db_create.py
+```
+or, you can set it up on your own by writing a script or firing up the interpreter
 
 #alembic migration commands
 
