@@ -35,6 +35,7 @@ if os.environ.get('DATABASE_URL') is not None:
 
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 app.secret_key = secret_key
 
@@ -300,7 +301,7 @@ def create_community():
             flash("community already exists")
     return render_template('create_community.html', form=form)
 
-@app.route('/community/<community>/top_users')
+@app.route('/community/<path:community>/top_users')
 def top_users(community):
     c = Community.query.filter_by(name=community).first()
     # returns a list of users that have the most posts in the community
@@ -427,21 +428,21 @@ def search_community_results(community, query, delta):
     }
     return render_template('community_results.html', **kwargs)
 
-@app.route('/community/<community>/post/<int:post_id>')
+@app.route('/community/<community>/post/<int:post_id>', methods=['GET', 'POST'])
 def show_community_post(community, post_id):
     c = Community.query.filter_by(name=community).first()
     post = Posts.query.get(post_id)
     form = CommentForm()
-    return render_template("show_post.html", c=c, post=post, form=form)
+    if form.validate_on_submit():
+        user = g.user
+        if c.is_joined(user):
+            content = request.form['content']
+            comment = Comments(content=content, author=user, post=post)
+            db.session.add(comment)
+        else:
+            flash("Need to be part of the community to add comments")
 
-@app.route('/community/<community>/post/<int:post_id>/comment', methods=['GET', 'POST'])
-def comment(community, post_id):
-    c = Community.query.filter_by(name=community).first()
-    user = g.user
-    post = Posts.query.get(post_id)
-    contents = request.form['content']
-    comment = Comments(contents, user, post)
-    return redirect(url_for('community', community=community))
+    return render_template("show_post.html", c=c, post=post, form=form)
 
 @app.route('/community/<community>/post/<int:post_id>/delete')
 def delete_community_post(community, post_id):

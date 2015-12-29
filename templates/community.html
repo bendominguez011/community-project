@@ -25,9 +25,9 @@
   <div id='left'>
 	<div id='nav'>
 	  <ul style="list-style-type: none">
-	      <li><a href="/community/{{community}}">community hub</a></li><br>
-        <li><a href="/community/{{community}}/new">create post</a></li><br>
-        <li> <a href="/community/{{community}}/top_users"> top users</a></li><br>
+	      <li><a href="{{ url_for('community', community=community, page=1 )}}">community hub</a></li><br>
+        <li><a href="{{ url_for('create_new_post', community=community )}}">create post</a></li><br>
+        <li> <a href="{{ url_for('top_users', community=community) }}"> top users</a></li><br>
 				<li> <a href="/">home</a></li>
 	    </ul>
 	</div>

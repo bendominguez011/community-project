@@ -113,7 +113,7 @@ class Community(db.Model):
         return [top_users[0][1], top_users[1][1], top_users[2][1]]
 
     def __repr__(self):
-        return '<Community %s>' % self.name
+        return '<Community {0}>'.format(self.name)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -140,7 +140,7 @@ class User(db.Model, UserMixin):
         order_by(Posts.time_created.desc())
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User {0}>'.format(self.username)
 
 
 
@@ -182,7 +182,7 @@ class Posts(db.Model):
         return func(*args).filter(Posts.time_created >= past)
 
     def __repr__(self):
-        return '<Post %r>' % self.title
+        return '<Post {0}>'.format(self.title)
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -192,14 +192,15 @@ class Comments(db.Model):
     time_created = db.Column(db.DateTime)
 
     def __init__(self, content, author, post):
-        self.contents = content
+        self.content = content
         self.author = author
         self.post = post
         self.time_created = datetime.datetime.utcnow()
 
     def __repr__(self):
-        return "<Contents '{0}'>".format(self.contents)
+        return "<Contents '{0}'>".format(self.content)
 
+models = [User, Community, Comments, Posts]
 
 if search_enabled:
     whoosh.whoosh_index(app, Posts)

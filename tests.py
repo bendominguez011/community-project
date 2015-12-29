@@ -86,6 +86,15 @@ class TestCase(unittest.TestCase):
         self.assertEqual(user1.render_all_community_posts().all(),
         [post4, post3, post2, post1])
 
+    def test_comments(self):
+        u = User('user', 'applez1')
+        c = Community('Powerlifting', None, None, None, None)
+        post = Posts('This is a Title', 'This is a body', author=u, community=c)
+        comment1 = Comments("This is a comment", author=u, post=post)
+        comment2 = Comments("This is a second comment", author=u, post=post)
+        comments = post.comments.all()
+        self.assertEqual([comment1, comment2], comments)
+"""
     def test_searches(self):
         c = Community(None, None, None, None, None)
         post1 = Posts('Title', None, None, c)
@@ -99,12 +108,7 @@ class TestCase(unittest.TestCase):
         search = Posts.search_by_time_delta(Posts.search_all, 1, 'Title')
         self.assertEqual([post1], search.all())
         search = Posts.search_by_time_delta(Posts.search_by_community, 31, 'Title', c)
-        self.assertEqual([post2, post1], search.all())
-
-    def test_comments(self):
-        u = User('user', None)
-        comment = Comments("This is a comment", author=u)
-        db.assertEqual(u, comment.author)
+"""
 
 if __name__ == '__main__':
     unittest.main()
