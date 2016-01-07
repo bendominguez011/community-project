@@ -1,6 +1,6 @@
 # Community Project
 
-The code that powers Community Project -- A Social Networking Service still in beta but available to the public.
+The code that powers CommunityProject.io -- A Social Networking Service still in beta but available to the public.
 
 * Database migrations uses Alembic
 * Frontend uses Bootstrap

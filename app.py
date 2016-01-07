@@ -1,4 +1,3 @@
-
 import os, sys, logging
 import types
 from flask import Flask, Response
@@ -167,13 +166,13 @@ def index(page=1):
         kwargs = {
             'posts': paginated_posts.items,
             'title': title,
-            'enough_posts': enough_posts
+            'enough_posts': enough_posts,
             }
     else:
         kwargs = {
             'posts': Posts.query.all(),
             'title': title,
-            'enough_posts': True
+            'enough_posts': True,
         }
     return render_template('index.html', **kwargs)
 
