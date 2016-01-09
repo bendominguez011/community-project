@@ -148,7 +148,8 @@ def signup_check():
         flash("Username already taken. Please try again")
         return redirect(url_for('signup'))
 
-
+class goto(Exception):
+    pass
 
 @app.route('/')
 @app.route('/<int:page>')
@@ -158,22 +159,27 @@ def index(page=1):
     title = 'Home'
     user = g.user
     if user and user.is_authenticated:
-        posts = user.render_all_community_posts()
-        # this is for banner support, doesnt work yet as of now
-        session['original_number_of_posts'] = len(posts.all())
-        paginated_posts = posts.paginate(page, POSTS_PER_PAGE, False)
-        enough_posts = len(posts.all()) > 3
-        kwargs = {
-            'posts': paginated_posts.items,
-            'title': title,
-            'enough_posts': enough_posts,
-            }
-    else:
-        kwargs = {
-            'posts': Posts.query.all(),
-            'title': title,
-            'enough_posts': True,
-        }
+        try:
+            posts = user.render_all_community_posts()
+            if not posts:
+                raise goto
+
+            # this is for banner support, doesnt work yet as of now
+            session['original_number_of_posts'] = len(posts.all())
+            paginated_posts = posts.paginate(page, POSTS_PER_PAGE, False)
+            enough_posts = len(posts.all()) > 3
+            kwargs = {
+                'posts': paginated_posts.items,
+                'title': title,
+                'enough_posts': enough_posts,
+                }
+        except goto:
+            pass
+    kwargs = {
+        'posts': Posts.query.all(),
+        'title': title,
+        'enough_posts': True,
+    }
     return render_template('index.html', **kwargs)
 
 @app.route('/user')

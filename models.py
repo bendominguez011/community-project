@@ -123,6 +123,7 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Posts', backref='author', lazy='dynamic')
     comments = db.relationship('Comments', backref='author', lazy='dynamic')
     findings = db.relationship('Community', backref='founder', lazy='dynamic')
+    votes = db.relationship('Comments', backref='voter', lazy='dynamic')
 
     def __init__(self, username, password):
         self.username = username
@@ -155,12 +156,14 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     community_id = db.Column(db.Integer, db.ForeignKey('community.id'))
     comments = db.relationship('Comments', backref='post', lazy='dynamic')
+    votes = db.relationship('Vote', backref='post', lazy='dynamic')
 
-    def __init__(self, title, body, author, community):
+    def __init__(self, title, body, author, community, vote):
         self.title = title
         self.body = body
         self.author = author
         self.community = community
+        self.vote = vote
         self.time_created = datetime.datetime.utcnow()
 
     #search all posts in database for a query
@@ -187,6 +190,7 @@ class Posts(db.Model):
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String())
+    votes = db.relationship('Vote', backref='comment', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     time_created = db.Column(db.DateTime)
@@ -199,6 +203,30 @@ class Comments(db.Model):
 
     def __repr__(self):
         return "<Contents '{0}'>".format(self.content)
+
+class Vote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+
+    def __init__(self, user, value, comment=None, post=None):
+        self.user = user
+        self.value = value
+        self.comment = comment
+        self.post = post
+
+    @classmethod
+    def vote(user, value, voted):
+        if voted.__class__.__name__ == 'Posts':
+            v = cls(user, value, post=voted)
+        elif voted.__class__.__name__ == 'Comments':
+            v = cls(user, value, comment=voted)
+        db.session.add(v)
+        db.session.commit()
+        return cls.user
+
 
 models = [User, Community, Comments, Posts]
 

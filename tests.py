@@ -3,7 +3,7 @@ import unittest
 import datetime
 from app import app
 from models import db
-from models import User, Community, Posts, Comments
+from models import User, Community, Posts, Comments, Vote
 from models import base_directory
 from flask import request, url_for
 from flask import Response
@@ -94,21 +94,21 @@ class TestCase(unittest.TestCase):
         comment2 = Comments("This is a second comment", author=u, post=post)
         comments = post.comments.all()
         self.assertEqual([comment1, comment2], comments)
-"""
-    def test_searches(self):
-        c = Community(None, None, None, None, None)
-        post1 = Posts('Title', None, None, c)
-        post2 = Posts('This is a title', None, None, c)
-        post3 = Posts('Another post', None, None, c)
-        db.session.add_all([post1, post2, post3, c])
-        db.session.commit()
-        search = Posts.search_all('Title')
-        self.assertEqual([post2, post1], search.all())
-        post2.time_created = datetime.date(2015, 8, 1)
-        search = Posts.search_by_time_delta(Posts.search_all, 1, 'Title')
-        self.assertEqual([post1], search.all())
-        search = Posts.search_by_time_delta(Posts.search_by_community, 31, 'Title', c)
-"""
+
+    def test_votes(self):
+        u = User('user', 'applez1')
+        c = Community('Powerlifting', None, None, None, None)
+        post = Posts('This is a Title', 'This is a body', author=u, community=c)
+        comment1 = Comments("This is a comment", author=u, post=post)
+        v = Vote(u)
+        self.assertEqual(u, v.user)
+        v = Vote(u, post=post)
+        self.assertEqual(v.post, post)
+        v = Vote(u, comment=comment1)
+        self.assertEqual(v.comment, comment1)
+        v.vote(u, post, 1, post)
+        self.assertEqual(post.value, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

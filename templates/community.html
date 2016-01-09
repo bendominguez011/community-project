@@ -1,92 +1,110 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<!--<link rel="stylesheet" href="{{ url_for('static', filename='community.css')}}">-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='community.css')}}">
+	<!---<link rel="stylesheet" href= "{{ url_for('static', filename='base.css') }}">-->
 	<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ c.name }}</title>
 </head>
 <body>
-<header>
-<div id="banner" style="position: relative; left: 40px;">
-    <h1>{{ c.name }}<span style="font-size: 12px">, founded by {{ c.founder.username }} on {{c.time_founded.month}}/{{c.time_founded.day}}/{{c.time_founded.year}}</span></h1>
+	<nav role="navigation">
+		 <ul class="nav nav-tabs">
+			 <li role="presentation"><a href="{{ url_for('index') }}">
+				 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+				 home</a></li>
+			 <li role="presentation"><a href="{{ url_for('community', community=community, page=1 )}}">
+				 <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+				 community hub</a></li>
+				<li role="presentation"><a href="{{ url_for('create_new_post', community=community )}}">
+				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+				create new post</a></li>
+				<li role="presentation"><a href="{{ url_for('top_users', community=community) }}">
+					<span class="glyphicon glyphicon-edit"></span>
+					top users</a></li>
+          <li role="presentation"><a href="/FAQ/{{c.name}}">
+  					<span class="glyphicon glyphicon-edit"></span>
+  					FAQ</a></li>
+          {% if current_user.is_authenticated %}
+      				<li role="presentation"><a href="{{ url_for('logout') }}">
+      					<span class="glyphicon glyphicon-edit"></span>
+      					logout</a></li>
+      		{% else %}
+      				<li role="presentation"><a href="{{ url_for('login') }}">
+      					<span class="glyphicon glyphicon-edit"></span>
+      					login</a></li>
+          {% endif %}
+    </ul>
+<!--  {% if g.search_enabled %}
+    <div id='search'>
+        <form action="/community/{{community}}/search" method="post" name="search">
+        	{{g.search_form.hidden_tag()}}
+          <p>Search here
+          {{ g.search_form.search }}
+          </p>
+          <p>Filter by community?
+          {{ g.search_form.community_search }}
+          </p>
+          <label for="title">{{g.search_form.time_search.label}}</label>
+        	{{ g.search_form.time_search }}
+    </div>
+        	<p> <input type="submit" value="search"/></p>
+        </form>
+  {% endif %}-->
+	</nav>
 
-	{% if session.user %}
-    <p> Welcome, {{session.user}}!, your last visit was on 0/0/0</p>{% if session.FOUNDER_MODE %}<p style="color: red">FOUNDER MODE</p>{% endif %}
-	{% else %}
-	<p>Welcome, anonymous user. If you can, sign up to contribute to the community!</p>
-	{% endif %}
-</div>
-</header>
-
-<div>
-  <div id='left'>
-	<div id='nav'>
-	  <ul style="list-style-type: none">
-	      <li><a href="{{ url_for('community', community=community, page=1 )}}">community hub</a></li><br>
-        <li><a href="{{ url_for('create_new_post', community=community )}}">create post</a></li><br>
-        <li> <a href="{{ url_for('top_users', community=community) }}"> top users</a></li><br>
-				<li> <a href="/">home</a></li>
-	    </ul>
-	</div>
-{% if g.search_enabled %}
-<div id='search'>
-    <form action="/community/{{community}}/search" method="post" name="search">
-				{{g.search_form.hidden_tag()}}
-		<p>Search here
-		{{ g.search_form.search }}
-		</p>
-		<p>Filter by community?
-		{{ g.search_form.community_search }}
-		</p>
-		<label for="title">{{g.search_form.time_search.label}}</label>
-				{{ g.search_form.time_search }}
-</div>
-		<p> <input type="submit" value="search"/></p>
-		</form>
-		<br>
-{% endif %}
-        <a href="/community/{{community}}/FAQ">FAQ</a>
-		<br>
-		<ul>
-		<p style="position: relative; right: 40px">Moderators:</p>
-		{% for moderator in c.moderators.all() %}
-		<li>{{moderator.username}}</li>
-		{% endfor %}
-		</ul>
-        <br>
-		{% if session.joined %}
-		<p>You are currently a part of this community.</p>
-        <form action="/community/{{community}}/leave" method="post" name="leave">
-				{{ g.join_form.hidden_tag() }}
+	<div id="slogan" style="position: relative; left: 40px;">
+			<h1 style="color: #79c879">
+				{{ c.name }}
+      </h3>
+        {% if session.joined %}
+        <form action="/community/{{community}}/leave" method="post" name="leave" style="display: inline">
+        {{ g.join_form.hidden_tag() }}
              <p>{{ g.join_form.leave }}</p>
         </form>
-		{% else %}
-		<form action="/community/{{community}}/join" method="post" name="join">
-			{{ g.join_form.hidden_tag() }}
-			<p>{{ g.join_form.join }}</p>
-		</form>
-		{% endif %}
-		{% if session.FOUNDER_MODE %}
-		<p style="color:red">Since you're the founder!</p>
-		<a href="/community/{{community}}/add_moderators">add moderators</a>
-		{% endif %}
-    </div>
-	</div>
+        {% else %}
+        <form action="/community/{{community}}/join" method="post" name="join">
+        {{ g.join_form.hidden_tag() }}
+        <p>{{ g.join_form.join }}</p>
+        </form>
+      {% endif %}
+      {% if session.joined %}
+      <p>you are currently a part of this community</p>
+      {% endif %}
+	 </div>
+	<hr align="left" width="45%" style="position: relative; left: 40px;">
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-	<ul>
+	<ul style="list-style-type: none">
 		{% for message in messages %}
-		<li><p><span style="color: red">{{ message }}</p></span></li>
+		<li>{{ message }} </li>
 		{% endfor %}
 	</ul>
 {% endif %}
 {% endwith %}
-<div id="content">
-    {% block content %}
-	{% endblock content %}
+<div style="position: relative; left: 40px">
+<ul>
+  {% if c.moderators %}
+<p style="position: relative; right: 40px">Moderators:</p>
+{% for moderator in c.moderators.all() %}
+<li>{{moderator.username}}</li>
+{% endfor %}
+  {% endif %}
+</ul>
+
+{% if session.FOUNDER_MODE %}
+<p style="color:red">Since you're the founder!</p>
+<a href="/community/{{community}}/add_moderators">add moderators</a>
+{% endif %}
+</div>
+</div>
+</div>
+<div style="position: relative; left: 10px">
+{% block content %}
+{% endblock content %}
+</div>
 </div>
 </body>
 </html>

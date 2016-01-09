@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+<div style="position: relative; left: 40px; width: 75%;">
 <p> Hello, if you cannot already notice, it's a bit of a ghost town over here. CommunityProject.io is currently in Public-Beta
 	mode, meaning it works and is available to the public (you), but is currently in a state of rampant development. I am currently working on rewriting the database models,
 	and as a result will have to wipe the database file clean every time I make a change since I don't want to deal with migrations.
 	You are welcome to do whatever, just know anything you post, comment, or create (including accounts), probably won't be here when you get back.
 </p>
+</div>
 	<div style="position: relative; left: 40px;">
 	{% if g.user.is_authenticated %}
 	<p>Hello {{g.user.username}}, this is your index page.</p>

@@ -1,3 +1,4 @@
-"""secret key used for deployment"""
-secret_key = '\x8fQ\nM\xa2\x1e\x03\xe3\xdf(:\xb5}\x84\xfb\xd8\x0eMR\
-xfdE\x14 \x8c'
+import os.path, sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+import key
+secret_key = key.key
