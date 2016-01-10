@@ -1,4 +1,1 @@
-import os.path, sys
-sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
-import key
-secret_key = key.key
+secret_key = "\xfb`\xff\x7fBnj\xba\x15m\x98\x86#075\x1aZf\x98\xa4*9\x7f"
