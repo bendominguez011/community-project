@@ -151,7 +151,7 @@ class Posts(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(60))
-    body = db.Column(db.String(200))
+    body = db.Column(db.String())
     time_created = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     community_id = db.Column(db.Integer, db.ForeignKey('community.id'))
