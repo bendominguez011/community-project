@@ -158,12 +158,11 @@ class Posts(db.Model):
     comments = db.relationship('Comments', backref='post', lazy='dynamic')
     votes = db.relationship('Vote', backref='post', lazy='dynamic')
 
-    def __init__(self, title, body, author, community, vote):
+    def __init__(self, title, body, author, community):
         self.title = title
         self.body = body
         self.author = author
         self.community = community
-        self.vote = vote
         self.time_created = datetime.datetime.utcnow()
 
     #search all posts in database for a query

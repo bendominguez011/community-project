@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="position: relative; left: 40px; width: 75%;">
-<p> Hello, if you cannot already notice, it's a bit of a ghost town over here. CommunityProject.io is currently in Public-Beta
-	mode, meaning it works and is available to the public (you), but is currently in a state of rampant development. I am currently working on rewriting the database models,
-	and as a result will have to wipe the database file clean every time I make a change since I don't want to deal with migrations.
-	You are welcome to do whatever, just know anything you post, comment, or create (including accounts), probably won't be here when you get back.
+<p> CommunityProject.io is currently in a public beta mode while I work out some bugs and add in some features.
+	coming soon:
+		<ul>
+			<li>Oauth with Google</li>
+			<li>Votes</li>
+			<li> updated templating/design</li>
+		</ul>
+		Take a look at the about page.
 </p>
 </div>
 	<div style="position: relative; left: 40px;">
@@ -14,7 +18,7 @@
 	<p> Welcome! This is the default index page. </p>
 	{% endif %}
 	</div>
-{% if posts %}
+
 <div style="position: relative;">
 <ul>
 {% for post in posts %}
@@ -36,6 +40,5 @@ Newer Posts
 Older Posts
 {% endif %}
 </ul>
-{% endif %}
 </div>
 {% endblock content %}

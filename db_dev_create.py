@@ -30,4 +30,17 @@ comment2 = Comments("Testing the new commenting feature!",
             post=post2)
 db.session.add_all([c, post, post2, comment1, comment2])
 
+c = Community("Anouncements",
+            password=None,
+            founder=u,
+            FAQ=None,
+            description=None)
+
+post = Posts("Upcoming updates", "New updates soon to come:\
+A Voting system, where you can thumb's up/thumb's down or dislike/like, dont know which yet.\n\
+Authenticating with google, so that you could sign in easily through your google account, however this update may be delayed.\n\
+Updated templating. I know the site currently looks terrible, but I plan on adding some more Javascript once I become more familiar with the language.\n",
+ author = u, community = c)
+db.session.add_all([post, c])
+
 db.session.commit()
