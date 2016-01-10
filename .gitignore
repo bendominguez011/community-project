@@ -1,5 +1,5 @@
 *.db
 *.pyc
 flask
-secret.pyy
+secret.py
 
