@@ -1,4 +1,6 @@
 *.db
 *.pyc
 flask
-
+static/css
+static/fonts
+static/js
