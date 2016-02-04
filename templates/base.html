@@ -14,33 +14,34 @@
 	{% endif %}
 </head>
 <body>
+	{% if current_user.is_authenticated %}
+	{% set navbar = [
+		('/', 'index', 'index', 'glyphicon-home'),
+		('/community', 'communities', 'communities', 'glyphicon-globe'),
+		('/user', 'user history', 'user_profile', 'glyphicon-user'),
+		('/logout', 'logout', 'logout', 'glyphicon-edit'),
+		('/authenticate_with_google', 'authenticate with google', 'authenticate_with_google', 'glyphicon-edit')
+		] %}
+	{% else %}
+	{% set navbar = [
+		('/', 'index', 'index', 'glyphicon-home'),
+		('/community', 'communities', 'communities', 'glyphicon-globe'),
+		('/login', 'login', 'login', 'glyphicon-edit'),
+		('/user', 'access your profile', 'user_profile', 'glyphicon-user'),
+		('/authenticate_with_google', 'authenticate with google', 'authenticate_with_google', 'glyphicon-edit')
+		] %}
+	{% endif %}
+	{% set active_page = active_page|default('index') -%}
+
 	<nav role="navigation">
 		 <ul class="nav nav-tabs">
-			 <li role="presentation"><a href="{{ url_for('index') }}">
-				 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-				 home</a></li>
-			 <li role="presentation"><a href="{{ url_for('communities') }}">
-				 <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-				 communities</a></li>
-			{% if current_user.is_authenticated %}
-				<li role="presentation"><a href="{{ url_for('user_profile')}}">
-				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-				user history</a></li>
-				<li role="presentation"><a href="{{ url_for('logout') }}">
-					<span class="glyphicon glyphicon-edit"></span>
-					logout</a></li>
-			{% else %}
-				<li role="presentation"><a href="{{ url_for('login') }}">
-					<span class="glyphicon glyphicon-edit"></span>
-					login</a></li>
-				<li role="presentation"><a href="{{ url_for('user_profile')}}">
-					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-					access your profile</a></li>
-
-			{% endif %}
-			<li role="presentation"><a href="{{ url_for('authenticate_with_google')}}">
-			<span class="glyphicon glyphicon-share" aria-hidden="true"></span>
-			authenticate with google</a></li>
+			 {% for url, title, id, glyphicon in navbar %}
+			 <li {% if id == active_page %}class="active" {% endif %} >
+				 <a href=" {{ url|e }}">
+				 <span class="glyphicon {{ glyphicon|e }}"</span>
+				{{ title|e }}
+				</li>
+			{% endfor %}
 		 </ul>
 	</nav>
 	<div id="slogan" style="position: relative; left: 40px;">
@@ -53,11 +54,6 @@
 	<hr align="left" width="45%" style="position: relative; left: 40px;">
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-	{% if request.MOBILE %}
-		<div>
-	{% else %}
-		<div style="position: relative; left: 85px;">
-{% endif %}
 	<ul style="list-style-type: none">
 		{% for message in messages %}
 		<li>{{ message }} </li>
