@@ -10,33 +10,18 @@
 	<title>{{ c.name }}</title>
 </head>
 <body>
-	<nav role="navigation">
-		 <ul class="nav nav-tabs">
-			 <li role="presentation"><a href="{{ url_for('index') }}">
-				 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-				 home</a></li>
-			 <li role="presentation"><a href="{{ url_for('community', community=community, page=1 )}}">
-				 <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-				 community hub</a></li>
-				<li role="presentation"><a href="{{ url_for('create_new_post', community=community )}}">
-				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-				create new post</a></li>
-				<li role="presentation"><a href="{{ url_for('top_users', community=community) }}">
-					<span class="glyphicon glyphicon-edit"></span>
-					top users</a></li>
-          <li role="presentation"><a href="/FAQ/{{c.name}}">
-  					<span class="glyphicon glyphicon-edit"></span>
-  					FAQ</a></li>
-          {% if current_user.is_authenticated %}
-      				<li role="presentation"><a href="{{ url_for('logout') }}">
-      					<span class="glyphicon glyphicon-edit"></span>
-      					logout</a></li>
-      		{% else %}
-      				<li role="presentation"><a href="{{ url_for('login') }}">
-      					<span class="glyphicon glyphicon-edit"></span>
-      					login</a></li>
-          {% endif %}
-    </ul>
+<!--{% if current_user.is_authenticated %}
+{% set navbar =
+('/', '', '', ''),
+('/community/{{ community }}/1', '', '', ''),
+('/community/{{ community }}/new', '', '', ''),
+('', '', '', ''),
+('', '', '', '')
+}
+{% else %}
+{% set navbar =
+
+-->
 <!--  {% if g.search_enabled %}
     <div id='search'>
         <form action="/community/{{community}}/search" method="post" name="search">
