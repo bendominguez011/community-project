@@ -10,18 +10,37 @@
 	<title>{{ c.name }}</title>
 </head>
 <body>
-<!--{% if current_user.is_authenticated %}
+{% if current_user.is_authenticated %}
 {% set navbar =
-('/', '', '', ''),
-('/community/{{ community }}/1', '', '', ''),
-('/community/{{ community }}/new', '', '', ''),
-('', '', '', ''),
-('', '', '', '')
-}
+('/', 'home', 'home', 'home'),
+('/community/{{ community }}/1', 'community hub', 'community', 'globe'),
+('/community/{{ community }}/new', 'create new post', 'new', 'edit'),
+('/community/{{ community }}/top_users', 'top users', 'top_users', 'user'),
+('/logout', 'logout', 'logout', 'edit')
+-%}
+<!-- have to find new glyphicons for create new post and top_users -->
 {% else %}
 {% set navbar =
-
--->
+('/', 'home', 'home', 'home'),
+('/community/{{ community }}/1', 'community hub', 'community', 'globe'),
+('/community/{{ community }}/new', 'create new post', 'new', 'edit'),
+('/community/{{ community }}/top_users', 'top users', 'top_users', 'user'),
+('/login', 'login', 'login', 'edit')
+-%}
+{% endif %}
+{% set active_page = active_page|default('community') -%}
+<nav class = "navbar">
+	<ul class = "nav nav-tabs">
+		{% for url, title, id, glyphicon in navbar %}
+		<li role="presentation"{% if id == active_page %}class="active" {% endif %} >
+			<a href = "{{ url }}">
+				<span class="glyphicon glyphicon-{{ gylphicon }}"></span>
+				{{ title }}
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</nav>
 <!--  {% if g.search_enabled %}
     <div id='search'>
         <form action="/community/{{community}}/search" method="post" name="search">
