@@ -1,2 +1,2 @@
-from app import db
+from app.app import db
 db.drop_all()

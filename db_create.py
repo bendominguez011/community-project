@@ -1,5 +1,5 @@
-from app import db
-from models import Community, Posts, Comments, User
+from app.app import db
+from app.models import Community, Posts, Comments, User
 
 db.create_all()
 u = User(username="ben", password="appleZ1")
