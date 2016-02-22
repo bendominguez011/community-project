@@ -44,6 +44,8 @@ def bot():
     day, month, year = now.day, now.month, now.year
     title = "Anouncement {0}/{1}/{2}".format(month, day, year)
 
+    """this returns the community Anouncements,
+    need to update later to make sure it always returns Anouncments"""
     c = Community.query.all().pop()
 
     post = Posts(title=title, body=content, author=None, community=c)
